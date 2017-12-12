@@ -1,0 +1,20 @@
+{
+  "code": 200,
+  "status": "OK",
+  "data": "OK",
+  "paging": {
+    "page": 1,
+    "item_per_page": 25,
+    "total_page": 100
+  },
+  "errors": {
+    "username": [
+      "not null",
+      "not blank"
+    ],
+    "password": [
+      "not null",
+      "strong password"
+    ]
+  }
+}
