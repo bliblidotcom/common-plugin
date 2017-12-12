@@ -96,7 +96,7 @@
     <repository>
       <id>bintray-bliblidotcom-maven</id>
       <name>bliblidotcom-maven</name>
-      <url>https://api.bintray.com/maven/bliblidotcom/maven/[PACKAGE_NAME]/;publish=1</url>
+      <url>https://api.bintray.com/maven/bliblidotcom/maven</url>
     </repository>
   </distributionManagement>
 
