@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bliblidotcom/common-plugin.svg?branch=master)](https://travis-ci.org/bliblidotcom/common-plugin)
+
 Spring Boot Common Plugin
 --------------------------
 
