@@ -95,14 +95,14 @@ public class PagingInterceptor extends HandlerInterceptorAdapter {
   }
 
   /**
-   * Transform string to list of sort by.
+   * Transform sort from request to list of sort by.
    *
-   * @param string contains multiple sort by separated by comma (,) with each item contains property name and
-   *               sorting direction separated by semi-colon (:)
+   * @param sortFromRequest contains multiple sortFromRequest by separated by comma (,)
+   *                        with each item contains property name and sorting direction separated by semi-colon (:)
    * @return list of sort by
    */
-  public List<SortBy> toSortByList(String string) {
-    return Arrays.stream(string.split(","))
+  public List<SortBy> toSortByList(String sortFromRequest) {
+    return Arrays.stream(sortFromRequest.split(","))
         .map(this::toSortBy)
         .filter(Objects::nonNull)
         .filter(sortBy -> Objects.nonNull(sortBy.getPropertyName()))
@@ -110,19 +110,19 @@ public class PagingInterceptor extends HandlerInterceptorAdapter {
   }
 
   /**
-   * Get sort by from string by splitting the string with semi-colon (:).
-   * If string is blank or contain only semi-colon (:), then null is returned.
+   * Get sort by from sort from request by splitting the sort from request with semi-colon (:).
+   * If sort from request is blank or contain only semi-colon (:), then null is returned.
    *
-   * @param string string containing property name and sorting direction separated by semi-colon (:)
+   * @param sortFromRequest containing property name and sorting direction separated by semi-colon (:)
    * @return sort by
    */
-  private SortBy toSortBy(String string) {
-    string = string.trim();
-    if (StringUtils.isEmpty(string.replaceAll(":", "")) || string.startsWith(":")) {
+  private SortBy toSortBy(String sortFromRequest) {
+    sortFromRequest = sortFromRequest.trim();
+    if (StringUtils.isEmpty(sortFromRequest.replaceAll(":", "")) || sortFromRequest.startsWith(":")) {
       return null;
     }
 
-    String[] sortBy = string.split(":");
+    String[] sortBy = sortFromRequest.split(":");
 
     return new SortBy(
         getAt(sortBy, 0, null),
