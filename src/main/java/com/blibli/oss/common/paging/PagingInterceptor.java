@@ -97,12 +97,12 @@ public class PagingInterceptor extends HandlerInterceptorAdapter {
   /**
    * Transform sort from request to list of sort by.
    *
-   * @param sortFromRequest contains multiple sortFromRequest by separated by comma (,)
-   *                        with each item contains property name and sorting direction separated by semi-colon (:)
+   * @param request contains multiple sort separated by comma (,) with each item contains property name
+   *                and sorting direction separated by semi-colon (:)
    * @return list of sort by
    */
-  public List<SortBy> toSortByList(String sortFromRequest) {
-    return Arrays.stream(sortFromRequest.split(","))
+  public List<SortBy> toSortByList(String request) {
+    return Arrays.stream(request.split(","))
         .map(this::toSortBy)
         .filter(Objects::nonNull)
         .filter(sortBy -> Objects.nonNull(sortBy.getPropertyName()))
@@ -110,19 +110,19 @@ public class PagingInterceptor extends HandlerInterceptorAdapter {
   }
 
   /**
-   * Get sort by from sort from request by splitting the sort from request with semi-colon (:).
+   * Get sort by from request by splitting the request with semi-colon (:).
    * If sort from request is blank or contain only semi-colon (:), then null is returned.
    *
-   * @param sortFromRequest containing property name and sorting direction separated by semi-colon (:)
+   * @param request containing property name and sorting direction separated by semi-colon (:)
    * @return sort by
    */
-  private SortBy toSortBy(String sortFromRequest) {
-    sortFromRequest = sortFromRequest.trim();
-    if (StringUtils.isEmpty(sortFromRequest.replaceAll(":", "")) || sortFromRequest.startsWith(":")) {
+  private SortBy toSortBy(String request) {
+    String sort = request.trim();
+    if (StringUtils.isEmpty(sort.replaceAll(":", "")) || sort.startsWith(":")) {
       return null;
     }
 
-    String[] sortBy = sortFromRequest.split(":");
+    String[] sortBy = sort.split(":");
 
     return new SortBy(
         getAt(sortBy, 0, null),
