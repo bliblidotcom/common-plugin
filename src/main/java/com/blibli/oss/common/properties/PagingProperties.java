@@ -12,11 +12,15 @@ public class PagingProperties {
 
   private Integer defaultItemPerPage = 50;
 
+  private String defaultSortDirection = "asc";
+
   private Integer maxItemPerPage = Integer.MAX_VALUE;
 
   private String pageQueryParam = "page";
 
   private String itemPerPageQueryParam = "item_per_page";
+
+  private String sortByQueryParam = "sort_by";
 
   public Integer getMaxItemPerPage() {
     return maxItemPerPage;
@@ -42,6 +46,14 @@ public class PagingProperties {
     this.itemPerPageQueryParam = itemPerPageQueryParam;
   }
 
+  public String getSortByQueryParam() {
+    return sortByQueryParam;
+  }
+
+  public void setSortByQueryParam(String sortByQueryParam) {
+    this.sortByQueryParam = sortByQueryParam;
+  }
+
   public Integer getDefaultPage() {
     return defaultPage;
   }
@@ -56,5 +68,13 @@ public class PagingProperties {
 
   public void setDefaultItemPerPage(Integer defaultItemPerPage) {
     this.defaultItemPerPage = defaultItemPerPage;
+  }
+
+  public String getDefaultSortDirection() {
+    return defaultSortDirection;
+  }
+
+  public void setDefaultSortDirection(String defaultSortDirection) {
+    this.defaultSortDirection = defaultSortDirection;
   }
 }
