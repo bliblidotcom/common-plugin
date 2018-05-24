@@ -3,6 +3,7 @@ package com.blibli.oss.common.response;
 import com.blibli.oss.common.paging.Paging;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Response<T> {
 
   @JsonProperty("code")
