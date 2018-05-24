@@ -4,11 +4,17 @@ import com.blibli.oss.common.properties.PagingProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Eko Kurniawan Khannedy
@@ -78,7 +84,62 @@ public class PagingInterceptor extends HandlerInterceptorAdapter {
       paging.setItemPerPage(pagingProperties.getMaxItemPerPage());
     }
 
+    String sortByFromRequest = request.getParameter(pagingProperties.getSortByQueryParam());
+    if (StringUtils.isEmpty(sortByFromRequest)) {
+      paging.setSortBy(Collections.emptyList());
+    } else {
+      paging.setSortBy(toSortByList(sortByFromRequest));
+    }
+
     return paging;
+  }
+
+  /**
+   * Transform sort from request to list of sort by.
+   *
+   * @param request contains multiple sort separated by comma (,) with each item contains property name
+   *                and sorting direction separated by semi-colon (:)
+   * @return list of sort by
+   */
+  public List<SortBy> toSortByList(String request) {
+    return Arrays.stream(request.split(","))
+        .map(this::toSortBy)
+        .filter(Objects::nonNull)
+        .filter(sortBy -> Objects.nonNull(sortBy.getPropertyName()))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Get sort by from request by splitting the request with semi-colon (:).
+   * If sort from request is blank or contain only semi-colon (:), then null is returned.
+   *
+   * @param request containing property name and sorting direction separated by semi-colon (:)
+   * @return sort by
+   */
+  private SortBy toSortBy(String request) {
+    String sort = request.trim();
+    if (StringUtils.isEmpty(sort.replaceAll(":", "")) || sort.startsWith(":")) {
+      return null;
+    }
+
+    String[] sortBy = sort.split(":");
+
+    return new SortBy(
+        getAt(sortBy, 0, null),
+        getAt(sortBy, 1, pagingProperties.getDefaultSortDirection())
+    );
+  }
+
+  /**
+   * Get value of index from array. If index is out of bound from array, then return default value.
+   *
+   * @param strings      array of value
+   * @param index        index of value
+   * @param defaultValue default value
+   * @return value from array or default value
+   */
+  private String getAt(String[] strings, int index, String defaultValue) {
+    return strings.length <= index ? defaultValue : strings[index];
   }
 
   /**

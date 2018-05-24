@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -26,6 +28,29 @@ public class PagingInterceptorTest {
 
   @Autowired
   private PagingProperties properties;
+
+  @Test
+  public void toSortByList() throws Exception {
+    PagingInterceptor interceptor = new PagingInterceptor(properties);
+
+    assertTrue(interceptor.toSortByList("").isEmpty());
+    assertTrue(interceptor.toSortByList(":").isEmpty());
+    assertTrue(interceptor.toSortByList(",").isEmpty());
+
+    List<SortBy> sorts = interceptor.toSortByList("property");
+    assertEquals("property", sorts.get(0).getPropertyName());
+    assertEquals("asc", sorts.get(0).getDirection());
+
+    assertTrue(interceptor.toSortByList(":desc").isEmpty());
+
+    sorts = interceptor.toSortByList("property:");
+    assertEquals("property", sorts.get(0).getPropertyName());
+    assertEquals("asc", sorts.get(0).getDirection());
+
+    sorts = interceptor.toSortByList("property:desc");
+    assertEquals("property", sorts.get(0).getPropertyName());
+    assertEquals("desc", sorts.get(0).getDirection());
+  }
 
   @Test
   public void toInt() throws Exception {
@@ -45,6 +70,7 @@ public class PagingInterceptorTest {
 
     assertEquals(properties.getDefaultPage(), pagingRequest.getPage());
     assertEquals(properties.getDefaultItemPerPage(), pagingRequest.getItemPerPage());
+    assertTrue(pagingRequest.getSortBy().isEmpty());
   }
 
   @Test
@@ -54,11 +80,14 @@ public class PagingInterceptorTest {
     HttpServletRequest request = mock(HttpServletRequest.class);
     when(request.getParameter(properties.getPageQueryParam())).thenReturn("10");
     when(request.getParameter(properties.getItemPerPageQueryParam())).thenReturn("100");
+    when(request.getParameter(properties.getSortByQueryParam())).thenReturn("propertyName:asc");
 
     PagingRequest pagingRequest = interceptor.fromServlet(request);
 
     assertEquals(Integer.valueOf(10), pagingRequest.getPage());
     assertEquals(Integer.valueOf(100), pagingRequest.getItemPerPage());
+    assertEquals("propertyName", pagingRequest.getSortBy().get(0).getPropertyName());
+    assertEquals("asc", pagingRequest.getSortBy().get(0).getDirection());
   }
 
   @Test
@@ -68,11 +97,13 @@ public class PagingInterceptorTest {
     HttpServletRequest request = mock(HttpServletRequest.class);
     when(request.getParameter(properties.getPageQueryParam())).thenReturn("salah");
     when(request.getParameter(properties.getItemPerPageQueryParam())).thenReturn("salah");
+    when(request.getParameter(properties.getSortByQueryParam())).thenReturn(":");
 
     PagingRequest pagingRequest = interceptor.fromServlet(request);
 
     assertEquals(properties.getDefaultPage(), pagingRequest.getPage());
     assertEquals(properties.getDefaultItemPerPage(), pagingRequest.getItemPerPage());
+    assertTrue(pagingRequest.getSortBy().isEmpty());
   }
 
   @Test
