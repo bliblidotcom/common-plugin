@@ -1,15 +1,24 @@
 package com.blibli.oss.common.paging;
 
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @author Eko Kurniawan Khannedy
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PagingRequest {
 
   private Integer page;
 
   private Integer itemPerPage;
+
+  private List<SortBy> sortBy;
 
   /**
    * Create Paging from Paging request
@@ -30,35 +39,5 @@ public class PagingRequest {
    */
   public Paging toPaging(Integer totalPage, Integer totalItem) {
     return new Paging(page, totalPage, itemPerPage, totalItem);
-  }
-
-  public Integer getPage() {
-    return page;
-  }
-
-  public void setPage(Integer page) {
-    this.page = page;
-  }
-
-  public Integer getItemPerPage() {
-    return itemPerPage;
-  }
-
-  public void setItemPerPage(Integer itemPerPage) {
-    this.itemPerPage = itemPerPage;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    PagingRequest that = (PagingRequest) o;
-    return Objects.equals(page, that.page) &&
-        Objects.equals(itemPerPage, that.itemPerPage);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(page, itemPerPage);
   }
 }
