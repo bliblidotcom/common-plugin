@@ -4,7 +4,7 @@
 
   <groupId>com.blibli.oss</groupId>
   <artifactId>common-plugin</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>common-plugin</name>
@@ -13,7 +13,7 @@
   <scm>
     <connection>scm:git:git@github.com:bliblidotcom/common-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:bliblidotcom/common-plugin.git</developerConnection>
-    <tag>common-plugin-0.0.4</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <parent>
