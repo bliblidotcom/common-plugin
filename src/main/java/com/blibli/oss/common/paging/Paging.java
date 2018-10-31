@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * @author Eko Kurniawan Khannedy
  */
-@Data
 @NoArgsConstructor
+@Data
 @AllArgsConstructor
 @Builder
 public class Paging {
