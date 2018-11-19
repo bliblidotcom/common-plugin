@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Eko Kurniawan Khannedy
+ * @deprecated we don't use @ModelAttribute anymore
  */
+@Deprecated
 public interface PagingController {
 
   /**

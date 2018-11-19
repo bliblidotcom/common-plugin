@@ -5,7 +5,9 @@ import java.util.Set;
 
 /**
  * @author Eko Kurniawan Khannedy
+ * @deprecated now we use command-plugin validation exception
  */
+@Deprecated
 @SuppressWarnings("unchecked")
 public class ValidationException extends RuntimeException {
 

@@ -2,6 +2,7 @@ package com.blibli.oss.common.paging;
 
 import com.blibli.oss.common.TestApplication;
 import com.blibli.oss.common.TestHelper;
+import com.blibli.oss.common.paging.webmvc.PagingInterceptor;
 import com.blibli.oss.common.properties.PagingProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,21 +34,21 @@ public class PagingInterceptorTest {
   public void toSortByList() throws Exception {
     PagingInterceptor interceptor = new PagingInterceptor(properties);
 
-    assertTrue(interceptor.toSortByList("").isEmpty());
-    assertTrue(interceptor.toSortByList(":").isEmpty());
-    assertTrue(interceptor.toSortByList(",").isEmpty());
+    assertTrue(PagingHelper.toSortByList("", properties).isEmpty());
+    assertTrue(PagingHelper.toSortByList(":", properties).isEmpty());
+    assertTrue(PagingHelper.toSortByList(",", properties).isEmpty());
 
-    List<SortBy> sorts = interceptor.toSortByList("property");
+    List<SortBy> sorts = PagingHelper.toSortByList("property", properties);
     assertEquals("property", sorts.get(0).getPropertyName());
     assertEquals("asc", sorts.get(0).getDirection());
 
-    assertTrue(interceptor.toSortByList(":desc").isEmpty());
+    assertTrue(PagingHelper.toSortByList(":desc", properties).isEmpty());
 
-    sorts = interceptor.toSortByList("property:");
+    sorts = PagingHelper.toSortByList("property:", properties);
     assertEquals("property", sorts.get(0).getPropertyName());
     assertEquals("asc", sorts.get(0).getDirection());
 
-    sorts = interceptor.toSortByList("property:desc");
+    sorts = PagingHelper.toSortByList("property:desc", properties);
     assertEquals("property", sorts.get(0).getPropertyName());
     assertEquals("desc", sorts.get(0).getDirection());
   }
@@ -56,8 +57,8 @@ public class PagingInterceptorTest {
   public void toInt() throws Exception {
     PagingInterceptor interceptor = new PagingInterceptor(properties);
 
-    assertEquals(Integer.valueOf(1), interceptor.toInt("1", 100));
-    assertEquals(Integer.valueOf(100), interceptor.toInt("salah", 100));
+    assertEquals(Integer.valueOf(1), PagingHelper.toInt("1", 100));
+    assertEquals(Integer.valueOf(100), PagingHelper.toInt("salah", 100));
   }
 
   @Test
@@ -66,7 +67,7 @@ public class PagingInterceptorTest {
 
     HttpServletRequest request = mock(HttpServletRequest.class);
 
-    PagingRequest pagingRequest = interceptor.fromServlet(request);
+    PagingRequest pagingRequest = PagingHelper.fromServlet(request, properties);
 
     assertEquals(properties.getDefaultPage(), pagingRequest.getPage());
     assertEquals(properties.getDefaultItemPerPage(), pagingRequest.getItemPerPage());
@@ -82,7 +83,7 @@ public class PagingInterceptorTest {
     when(request.getParameter(properties.getItemPerPageQueryParam())).thenReturn("100");
     when(request.getParameter(properties.getSortByQueryParam())).thenReturn("propertyName:asc");
 
-    PagingRequest pagingRequest = interceptor.fromServlet(request);
+    PagingRequest pagingRequest = PagingHelper.fromServlet(request, properties);
 
     assertEquals(Integer.valueOf(10), pagingRequest.getPage());
     assertEquals(Integer.valueOf(100), pagingRequest.getItemPerPage());
@@ -99,7 +100,7 @@ public class PagingInterceptorTest {
     when(request.getParameter(properties.getItemPerPageQueryParam())).thenReturn("salah");
     when(request.getParameter(properties.getSortByQueryParam())).thenReturn(":");
 
-    PagingRequest pagingRequest = interceptor.fromServlet(request);
+    PagingRequest pagingRequest = PagingHelper.fromServlet(request, properties);
 
     assertEquals(properties.getDefaultPage(), pagingRequest.getPage());
     assertEquals(properties.getDefaultItemPerPage(), pagingRequest.getItemPerPage());
@@ -118,7 +119,7 @@ public class PagingInterceptorTest {
     when(request.getParameter(pagingProperties.getPageQueryParam())).thenReturn("10");
     when(request.getParameter(pagingProperties.getItemPerPageQueryParam())).thenReturn("100");
 
-    PagingRequest pagingRequest = interceptor.fromServlet(request);
+    PagingRequest pagingRequest = PagingHelper.fromServlet(request, pagingProperties);
 
     assertEquals(Integer.valueOf(10), pagingRequest.getPage());
     assertEquals(Integer.valueOf(10), pagingRequest.getItemPerPage());
