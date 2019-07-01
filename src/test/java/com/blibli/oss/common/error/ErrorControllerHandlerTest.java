@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.preemptive;
 import static org.hamcrest.Matchers.containsString;
 
 /**
@@ -133,6 +134,94 @@ public class ErrorControllerHandlerTest {
         .body(containsString("400"))
         .body(containsString("data"))
         .statusCode(HttpStatus.BAD_REQUEST.value());
+  }
+
+  @Test
+  public void serverWebInputError() {
+    given()
+      .when()
+      .get("/reactive/server-web-input")
+      .then()
+      .body(containsString("400"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.BAD_REQUEST.value());
+  }
+
+  @Test
+  public void webExchangeBind() {
+    given()
+      .when()
+      .get("/reactive/web-exchange-bind")
+      .then()
+      .body(containsString("400"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.BAD_REQUEST.value());
+  }
+
+  @Test
+  public void mediaTypeNotSupported() {
+    given()
+      .when()
+      .get("/reactive/media-type-not-supported")
+      .then()
+      .body(containsString("415"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+  }
+
+  @Test
+  public void notAcceptableStatus() {
+    given()
+      .when()
+      .get("/reactive/not-acceptable")
+      .then()
+      .body(containsString("406"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.NOT_ACCEPTABLE.value());
+  }
+
+  @Test
+  public void unsupportedMediaTypeStatus() {
+    given()
+      .when()
+      .get("/reactive/unsupported-media-type-status")
+      .then()
+      .body(containsString("415"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+  }
+
+  @Test
+  public void methodNotAllowed() {
+    given()
+      .when()
+      .get("/reactive/method-not-allowed")
+      .then()
+      .body(containsString("405"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+  }
+
+  @Test
+  public void serverErrorException() {
+    given()
+      .when()
+      .get("/reactive/server-error-exception")
+      .then()
+      .body(containsString("500"))
+      .body(containsString("data"))
+      .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+  }
+
+  @Test
+  public void responseStatusException() {
+    given()
+      .when()
+      .get("/reactive/response-status-exception")
+      .then()
+      .body(containsString("500"))
+      .body(containsString(HttpStatus.INTERNAL_SERVER_ERROR.name()))
+      .statusCode(HttpStatus.OK.value());
   }
 
 }
