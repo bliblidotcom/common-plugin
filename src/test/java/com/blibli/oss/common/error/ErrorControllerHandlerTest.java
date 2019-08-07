@@ -125,18 +125,6 @@ public class ErrorControllerHandlerTest {
   }
 
   @Test
-  public void validationError() throws Exception {
-    given()
-        .header("Accept", "application/json")
-        .when()
-        .get("/validation-error")
-        .then()
-        .body(containsString("400"))
-        .body(containsString("data"))
-        .statusCode(HttpStatus.BAD_REQUEST.value());
-  }
-
-  @Test
   public void serverWebInputError() {
     given()
       .when()

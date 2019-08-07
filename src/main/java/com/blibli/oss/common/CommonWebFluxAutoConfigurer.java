@@ -16,14 +16,11 @@ import org.springframework.web.reactive.result.method.annotation.ArgumentResolve
 public class CommonWebFluxAutoConfigurer implements WebFluxConfigurer {
 
   @Autowired
-  private ReactiveAdapterRegistry reactiveAdapterRegistry;
-
-  @Autowired
   private PagingProperties pagingProperties;
 
   @Override
   public void configureArgumentResolvers(ArgumentResolverConfigurer configurer) {
-    configurer.addCustomResolver(new ReactivePagingArgumentResolver(reactiveAdapterRegistry, pagingProperties));
+    configurer.addCustomResolver(new ReactivePagingArgumentResolver(ReactiveAdapterRegistry.getSharedInstance(), pagingProperties));
   }
 
 }
