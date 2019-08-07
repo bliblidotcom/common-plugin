@@ -2,13 +2,22 @@ package com.blibli.oss.common.error;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -52,6 +61,52 @@ public class HelloController {
     Hello hello = new Hello();
     Set<ConstraintViolation<Hello>> constraintViolations = validator.validate(hello);
     throw new ValidationException(constraintViolations);
+  }
+
+  @RequestMapping(value = "/reactive/server-web-input", method = RequestMethod.GET)
+  public String serverWebInput() {
+    throw new ServerWebInputException("");
+  }
+
+  @RequestMapping(value = "/reactive/web-exchange-bind", method = RequestMethod.GET)
+  public String webExchangeBind() throws Exception {
+    MethodParameter param = new MethodParameter(
+      HelloController.class.getMethod("webExchangeBind"),
+      -1
+    );
+    BindingResult binding = new BeanPropertyBindingResult("BliValidation", "ValidationBli");
+
+    throw new WebExchangeBindException(param, binding);
+  }
+
+  @RequestMapping(value = "/reactive/media-type-not-supported", method = RequestMethod.GET)
+  public String mediaTypeNotAccepted() {
+    throw new MediaTypeNotSupportedStatusException("BliMediaNotSupported");
+  }
+
+  @RequestMapping(value = "/reactive/not-acceptable", method = RequestMethod.GET)
+  public String notAcceptable() {
+    throw new NotAcceptableStatusException("NotAcceptable");
+  }
+
+  @RequestMapping(value = "/reactive/unsupported-media-type-status", method = RequestMethod.GET)
+  public String unsupportedMediaType() {
+    throw new UnsupportedMediaTypeStatusException("MediaStatus");
+  }
+
+  @RequestMapping(value = "/reactive/method-not-allowed", method = RequestMethod.GET)
+  public String methodNotAllowed() {
+    throw new MethodNotAllowedException("NotAllowed", Collections.singletonList(HttpMethod.DELETE));
+  }
+
+  @RequestMapping(value = "/reactive/server-error-exception", method = RequestMethod.GET)
+  public String serverErrorException() {
+    throw new ServerErrorException("Exception", new Exception());
+  }
+
+  @RequestMapping(value = "/reactive/response-status-exception", method = RequestMethod.GET)
+  public String responseStatusException() {
+    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
