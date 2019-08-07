@@ -56,13 +56,6 @@ public class HelloController {
     return hello;
   }
 
-  @RequestMapping(value = "/validation-error", method = RequestMethod.GET)
-  public Object validationError() {
-    Hello hello = new Hello();
-    Set<ConstraintViolation<Hello>> constraintViolations = validator.validate(hello);
-    throw new ValidationException(constraintViolations);
-  }
-
   @RequestMapping(value = "/reactive/server-web-input", method = RequestMethod.GET)
   public String serverWebInput() {
     throw new ServerWebInputException("");

@@ -39,17 +39,6 @@ public interface ErrorCommonControllerHandler {
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(ValidationException.class)
-  default Response<Object> validationException(ValidationException e) {
-    getLogger().warn(ValidationException.class.getName(), e);
-    Response<Object> response = new Response<>();
-    response.setCode(HttpStatus.BAD_REQUEST.value());
-    response.setStatus(HttpStatus.BAD_REQUEST.name());
-    response.setErrors(Errors.from(e.getConstraintViolations()));
-    return response;
-  }
-
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(HttpMessageNotReadableException.class)
   default Response<Object> httpMessageNotReadableException(HttpMessageNotReadableException e) {
     getLogger().warn(HttpMessageNotReadableException.class.getName(), e);
