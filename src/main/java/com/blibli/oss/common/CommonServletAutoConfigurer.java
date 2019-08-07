@@ -1,27 +1,29 @@
 package com.blibli.oss.common;
 
-import com.blibli.oss.common.paging.PagingInterceptor;
+import com.blibli.oss.common.paging.webmvc.PagingArgumentResolverImpl;
 import com.blibli.oss.common.properties.PagingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * @author Eko Kurniawan Khannedy
  */
 @Configuration
-@EnableConfigurationProperties({PagingProperties.class})
-@ConditionalOnClass(name = "org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter")
-public class CommonServletAutoConfigurer extends WebMvcConfigurerAdapter {
+@ConditionalOnClass({
+  WebMvcConfigurer.class
+})
+public class CommonServletAutoConfigurer implements WebMvcConfigurer {
 
   @Autowired
   private PagingProperties pagingProperties;
 
   @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new PagingInterceptor(pagingProperties));
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    argumentResolvers.add(new PagingArgumentResolverImpl(pagingProperties));
   }
 }

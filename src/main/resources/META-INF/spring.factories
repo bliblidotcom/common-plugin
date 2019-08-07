@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.blibli.oss.common.CommonServletAutoConfigurer
+com.blibli.oss.common.CommonAutoConfiguration,\
+com.blibli.oss.common.CommonServletAutoConfigurer,\
+com.blibli.oss.common.CommonWebFluxAutoConfigurer

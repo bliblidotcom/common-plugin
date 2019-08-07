@@ -125,18 +125,6 @@ public class ErrorControllerHandlerTest {
   }
 
   @Test
-  public void validationError() throws Exception {
-    given()
-        .header("Accept", "application/json")
-        .when()
-        .get("/validation-error")
-        .then()
-        .body(containsString("400"))
-        .body(containsString("data"))
-        .statusCode(HttpStatus.BAD_REQUEST.value());
-  }
-
-  @Test
   public void serverWebInputError() {
     given()
       .when()
@@ -221,7 +209,7 @@ public class ErrorControllerHandlerTest {
       .then()
       .body(containsString("500"))
       .body(containsString(HttpStatus.INTERNAL_SERVER_ERROR.name()))
-      .statusCode(HttpStatus.OK.value());
+      .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
   }
 
 }

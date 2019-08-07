@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Import;
 /**
  * @author Eko Kurniawan Khannedy
  */
-@SpringBootApplication
+@SpringBootApplication(
+  exclude = CommonWebFluxAutoConfigurer.class
+)
 @Import(CommonServletAutoConfigurer.class)
 public class TestApplication {
 }
