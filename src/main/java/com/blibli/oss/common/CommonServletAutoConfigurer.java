@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
 @ConditionalOnClass({
   WebMvcConfigurer.class
 })
-public class CommonServletAutoConfigurer extends WebMvcConfigurerAdapter {
+public class CommonServletAutoConfigurer implements WebMvcConfigurer {
 
   @Autowired
   private PagingProperties pagingProperties;

@@ -76,7 +76,8 @@ public class HelloController {
     );
     BindingResult binding = new BeanPropertyBindingResult("BliValidation", "ValidationBli");
 
-    throw new WebExchangeBindException(param, binding);
+    WebExchangeBindException exception = new WebExchangeBindException(param, binding);
+    throw exception;
   }
 
   @RequestMapping(value = "/reactive/media-type-not-supported", method = RequestMethod.GET)

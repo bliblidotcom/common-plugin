@@ -221,7 +221,7 @@ public class ErrorControllerHandlerTest {
       .then()
       .body(containsString("500"))
       .body(containsString(HttpStatus.INTERNAL_SERVER_ERROR.name()))
-      .statusCode(HttpStatus.OK.value());
+      .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
   }
 
 }

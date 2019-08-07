@@ -4,22 +4,26 @@ import com.blibli.oss.common.paging.webflux.ReactivePagingArgumentResolver;
 import com.blibli.oss.common.properties.PagingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ReactiveAdapterRegistry;
-import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 
 @Configuration
 @ConditionalOnClass({
-  HandlerMethodArgumentResolver.class
+  WebFluxConfigurer.class
 })
-public class CommonWebFluxAutoConfigurer {
+public class CommonWebFluxAutoConfigurer implements WebFluxConfigurer {
 
-  @Bean
   @Autowired
-  public ReactivePagingArgumentResolver reactivePagingArgumentResolver(ReactiveAdapterRegistry reactiveAdapterRegistry,
-                                                                       PagingProperties pagingProperties) {
-    return new ReactivePagingArgumentResolver(reactiveAdapterRegistry, pagingProperties);
+  private ReactiveAdapterRegistry reactiveAdapterRegistry;
+
+  @Autowired
+  private PagingProperties pagingProperties;
+
+  @Override
+  public void configureArgumentResolvers(ArgumentResolverConfigurer configurer) {
+    configurer.addCustomResolver(new ReactivePagingArgumentResolver(reactiveAdapterRegistry, pagingProperties));
   }
 
 }
