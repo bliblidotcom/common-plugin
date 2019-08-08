@@ -1,6 +1,6 @@
 package com.blibli.oss.common.paging;
 
-import com.blibli.oss.common.TestReactiveApplication;
+import com.blibli.oss.common.CommonServletAutoConfigurer;
 import com.blibli.oss.common.properties.PagingProperties;
 import io.restassured.RestAssured;
 import org.junit.Before;
@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,7 +21,13 @@ import static org.hamcrest.Matchers.not;
  * @author Eko Kurniawan Khannedy
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TestReactiveApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+  classes = PagingReactiveControllerTest.Application.class,
+  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+  properties = {
+    "spring.main.web-application-type=reactive"
+  }
+)
 public class PagingReactiveControllerTest {
 
   @Value("${local.server.port}")
@@ -79,6 +86,13 @@ public class PagingReactiveControllerTest {
       .body(containsString("1000"))
       .body(containsString("OK"))
       .statusCode(HttpStatus.OK.value());
+  }
+
+  @SpringBootApplication(
+    exclude = CommonServletAutoConfigurer.class
+  )
+  public static class Application {
+
   }
 
 }
