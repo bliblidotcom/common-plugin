@@ -33,4 +33,7 @@ public class Response<T> {
 
   @JsonProperty("errors")
   private Map<String, List<String>> errors;
+
+  @JsonProperty("metadata")
+  private Map<String, Object> metadata;
 }
