@@ -81,7 +81,7 @@ public class Errors {
 
     constraintViolations.forEach(violation -> {
       try {
-        Class<?> beanClass = violation.getRootBeanClass();
+        Class<?> beanClass = violation.getLeafBean().getClass();
 
         String field = "";
         for (Path.Node node : violation.getPropertyPath()) {

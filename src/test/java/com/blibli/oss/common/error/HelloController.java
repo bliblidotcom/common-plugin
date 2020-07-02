@@ -2,6 +2,7 @@ package com.blibli.oss.common.error;
 
 import com.blibli.oss.common.metadata.MetaData;
 import com.blibli.oss.common.metadata.MetaDatas;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -50,12 +52,28 @@ public class HelloController {
   @RequestMapping(value = "/validation-error", method = RequestMethod.GET)
   public Object validationError() {
     Hello hello = new Hello();
+    hello.setNestedHello(new NestedHello());
     Set<ConstraintViolation<Hello>> constraintViolations = validator.validate(hello);
     throw new ValidationException(constraintViolations);
   }
 
 }
 
+@Data
+class NestedHello {
+
+  @NotBlank
+  private String first;
+
+  @MetaDatas({
+      @MetaData(key = "meta2", value = "Meta Value")
+  })
+  @NotBlank
+  private String second;
+
+}
+
+@Data
 class Hello {
 
   @MetaDatas({
@@ -64,21 +82,9 @@ class Hello {
   @NotBlank
   private String data;
 
+  @Valid
+  @NotNull
+  private NestedHello nestedHello;
+
   private Integer number;
-
-  public Integer getNumber() {
-    return number;
-  }
-
-  public void setNumber(Integer number) {
-    this.number = number;
-  }
-
-  public String getData() {
-    return data;
-  }
-
-  public void setData(String data) {
-    this.data = data;
-  }
 }

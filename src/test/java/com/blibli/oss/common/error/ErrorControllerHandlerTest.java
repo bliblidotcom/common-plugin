@@ -135,6 +135,10 @@ public class ErrorControllerHandlerTest {
         .body(containsString("metadata"))
         .body(containsString("test"))
         .body(containsString("Eko"))
+        .body(containsString("nestedHello"))
+        .body(containsString("nestedHello.second"))
+        .body(containsString("meta2"))
+        .body(containsString("Meta Value"))
         .statusCode(HttpStatus.BAD_REQUEST.value());
   }
 
