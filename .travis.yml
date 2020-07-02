@@ -12,7 +12,7 @@ cache:
 
 deploy:
   provider: script
-  script: .travis/release.sh
+  script: bash .travis/release.sh
   skip_cleanup: true
   on:
     tags: true
