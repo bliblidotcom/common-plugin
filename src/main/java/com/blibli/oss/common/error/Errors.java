@@ -1,16 +1,21 @@
 package com.blibli.oss.common.error;
 
+import com.blibli.oss.common.metadata.MetaData;
+import com.blibli.oss.common.metadata.MetaDatas;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
  * @author Eko Kurniawan Khannedy
  */
+@Slf4j
 public class Errors {
 
   /**
@@ -69,6 +74,39 @@ public class Errors {
     });
 
     return map;
+  }
+
+  public static Map<String, Map<String, String>> getMetadata(Set<ConstraintViolation<?>> constraintViolations) {
+    Map<String, Map<String, String>> metadata = new HashMap<>();
+
+    constraintViolations.forEach(violation -> {
+      try {
+        Class<?> beanClass = violation.getRootBeanClass();
+
+        String field = "";
+        for (Path.Node node : violation.getPropertyPath()) {
+          field = node.getName();
+        }
+        Field declaredField = beanClass.getDeclaredField(field);
+
+        MetaDatas metaDatas = declaredField.getAnnotation(MetaDatas.class);
+        Map<String, String> values = new HashMap<>();
+
+        if (metaDatas != null) {
+          for (MetaData metaData : metaDatas.value()) {
+            values.put(metaData.key(), metaData.value());
+          }
+        }
+
+        for (String attribute : getAttributes(violation)) {
+          metadata.put(attribute, values);
+        }
+      } catch (Throwable throwable) {
+        log.info(throwable.getMessage(), throwable);
+      }
+    });
+
+    return metadata;
   }
 
   private static void putEntry(Map<String, List<String>> map, String key, String value) {

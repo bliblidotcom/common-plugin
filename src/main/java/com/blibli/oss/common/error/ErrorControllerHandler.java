@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.util.Collections;
+
 /**
  * @author Eko Kurniawan Khannedy
  */
@@ -110,6 +112,7 @@ public interface ErrorControllerHandler {
     response.setCode(HttpStatus.BAD_REQUEST.value());
     response.setStatus(HttpStatus.BAD_REQUEST.name());
     response.setErrors(Errors.from(e.getConstraintViolations()));
+    response.setMetadata(Collections.singletonMap("errors", Errors.getMetadata(e.getConstraintViolations())));
     return response;
   }
 

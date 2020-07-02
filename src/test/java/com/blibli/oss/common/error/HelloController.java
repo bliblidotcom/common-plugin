@@ -1,14 +1,14 @@
 package com.blibli.oss.common.error;
 
+import com.blibli.oss.common.metadata.MetaData;
+import com.blibli.oss.common.metadata.MetaDatas;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validator;
+import javax.validation.*;
 import java.util.Set;
 
 /**
@@ -58,6 +58,9 @@ public class HelloController {
 
 class Hello {
 
+  @MetaDatas({
+      @MetaData(key = "test", value = "Eko")
+  })
   @NotBlank
   private String data;
 

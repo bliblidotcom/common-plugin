@@ -132,6 +132,9 @@ public class ErrorControllerHandlerTest {
         .then()
         .body(containsString("400"))
         .body(containsString("data"))
+        .body(containsString("metadata"))
+        .body(containsString("test"))
+        .body(containsString("Eko"))
         .statusCode(HttpStatus.BAD_REQUEST.value());
   }
 
